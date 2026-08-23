@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { api, confidencePercent, depthPercent, normalizeAnalysis } from "../services/api";
+import { api, confidencePercent, depthPercent } from "../services/api";
 import { Database, Crosshair, ShieldCheck, Activity, Download, ArrowRight, ChevronRight, CalendarDays, RefreshCw } from "lucide-react";
 import { downloadAnalysisReport } from "../services/report";
 import LightCurveChart from "../components/analysis/LightCurveChart";
@@ -55,15 +55,133 @@ function normalize(item) {
   };
 }
 function curve(raw) {
-  return (raw || []).map(p => Array.isArray(p) ? { time: num(p[0]), flux: num(p[1]) } : { time: num(p?.time ?? p?.t ?? p?.time_days), flux: num(p?.flux ?? p?.f ?? p?.normalized_flux ?? p?.value) }).filter(x => Number.isFinite(x.time) && Number.isFinite(x.flux));
+    if (!Array.isArray(raw)) {
+        return [];
+    }
+
+    return raw
+        .map((p) => {
+            if (Array.isArray(p)) {
+                return {
+                    time: num(p[0]),
+                    flux: num(p[1]),
+                };
+            }
+
+            if (!p || typeof p !== "object") {
+                return null;
+            }
+
+            return {
+                time: num(
+                    p.time ??
+                    p.t ??
+                    p.time_days
+                ),
+                flux: num(
+                    p.flux ??
+                    p.f ??
+                    p.normalized_flux ??
+                    p.value
+                ),
+            };
+        })
+        .filter(
+            (x) =>
+                x &&
+                Number.isFinite(x.time) &&
+                Number.isFinite(x.flux)
+        );
 }
 function phase(raw) {
-  return (raw || []).map(p => Array.isArray(p) ? { phase: num(p[0]), flux: num(p[1]) } : { phase: num(p?.phase ?? p?.x), flux: num(p?.flux ?? p?.normalized_flux ?? p?.y) }).filter(x => Number.isFinite(x.phase) && Number.isFinite(x.flux));
+    if (!Array.isArray(raw)) {
+        return [];
+    }
+
+    return raw
+        .map((p) => {
+            if (Array.isArray(p)) {
+                return {
+                    phase: num(p[0]),
+                    flux: num(p[1]),
+                };
+            }
+
+            if (!p || typeof p !== "object") {
+                return null;
+            }
+
+            return {
+                phase: num(
+                    p.phase ??
+                    p.x
+                ),
+                flux: num(
+                    p.flux ??
+                    p.normalized_flux ??
+                    p.y
+                ),
+            };
+        })
+        .filter(
+            (x) =>
+                x &&
+                Number.isFinite(x.phase) &&
+                Number.isFinite(x.flux)
+        );
 }
+
 function transit(raw) {
-  if (Array.isArray(raw)) return raw.map(x => typeof x === "number" ? { time: x } : x);
-  if (typeof raw === "string") try { return transit(JSON.parse(raw)) } catch { return [] }
-  return [];
+    if (typeof raw === "string") {
+        try {
+            return transit(JSON.parse(raw));
+        } catch {
+            return [];
+        }
+    }
+
+    if (!Array.isArray(raw)) {
+        return [];
+    }
+
+    return raw
+        .map((x) => {
+            if (typeof x === "number") {
+                return {
+                    time: num(x),
+                    depth: 0,
+                };
+            }
+
+            if (!x || typeof x !== "object") {
+                return null;
+            }
+
+            const time = num(
+                x.time ??
+                x.transit_time ??
+                x.center_time ??
+                x.mid_time ??
+                x.center ??
+                x.epoch ??
+                x.t0
+            );
+
+            const depth = num(
+                x.depth ??
+                x.transit_depth
+            );
+
+            if (!Number.isFinite(time)) {
+                return null;
+            }
+
+            return {
+                time,
+                depth,
+            };
+        })
+        .filter(Boolean);
 }
 
 export default function Dashboard({ setPage, setSelectedAnalysisId }) {
@@ -74,7 +192,10 @@ export default function Dashboard({ setPage, setSelectedAnalysisId }) {
       setLoading(true); setError("");
       const [sd, ad] = await Promise.all([api.dashboard(), api.analyses()]);
       setStats(sd);
-      setItems((Array.isArray(ad) ? ad : ad.analyses || []).map(normalizeAnalysis));
+      setItems(
+        (Array.isArray(ad) ? ad : ad.analyses || [])
+          .map(normalize)
+      );
     } catch (e) { setError(e.message) } finally { setLoading(false) }
   };
   useEffect(() => { load() }, []);
