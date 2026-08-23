@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { BarChart3, Telescope, ScanSearch, Orbit, Info, Sparkles } from "lucide-react";
+import { api } from "../../services/api";
 import SpaceScene from "../three/SpaceScene";
 
 const nav=[
@@ -9,6 +11,8 @@ const nav=[
 ];
 
 export default function AppShell({page,setPage,children}){
+  const [healthy,setHealthy]=useState(null);
+  useEffect(()=>{let alive=true;api.health().then(()=>alive&&setHealthy(true)).catch(()=>alive&&setHealthy(false));return()=>{alive=false}},[]);
   return <div className="min-h-screen bg-[#020712] text-slate-100">
     <aside className="fixed inset-y-0 left-0 z-50 hidden w-[244px] overflow-hidden border-r border-[#20283b] bg-[#030816] lg:block">
       <div className="absolute inset-x-0 bottom-0 h-[56%] opacity-75">
@@ -41,7 +45,7 @@ export default function AppShell({page,setPage,children}){
           })}
         </nav>
 
-        <div className="mt-4 h-px bg-white/[.07]"/>
+        <div className="mt-4 flex items-center justify-between border-t border-white/[.07] pt-4 px-2"><span className="text-[11px] text-slate-500">Backend</span><span className={healthy===true?"text-[10px] text-emerald-400":"text-[10px] text-slate-500"}>● {healthy===true?"Connected":healthy===false?"Offline":"Checking"}</span></div>
         <div className="mt-6 px-2">
           <p className="text-[12px] uppercase tracking-[.05em] text-slate-500">AI MODEL</p>
           <p className="mt-3 text-[14px] text-slate-200">Random Forest</p>

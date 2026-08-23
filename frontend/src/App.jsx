@@ -11,7 +11,7 @@ export default function App(){
  const[selectedAnalysisId,setSelectedAnalysisId]=useState(null);
  if(page==="home")return <Home onExplore={()=>setPage("dashboard")}/>;
  return <AppShell page={page} setPage={setPage}>
-   {page==="dashboard"&&<Dashboard/>}
+   {page==="dashboard"&&<Dashboard setPage={setPage} setSelectedAnalysisId={setSelectedAnalysisId}/>}
    {page==="candidates"&&<Candidates setPage={setPage} setSelectedAnalysisId={setSelectedAnalysisId}/>}
    {page==="about"&&<About/>}
    {page==="analyze"&&<Analyze analysisId={selectedAnalysisId}/>}

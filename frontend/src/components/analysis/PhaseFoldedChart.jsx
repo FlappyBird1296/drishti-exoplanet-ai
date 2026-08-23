@@ -11,9 +11,8 @@ function bin(data,bins=90){
 }
 export default function PhaseFoldedChart({data=[],periodDays,transitDurationDays}){
   if(!data.length)return <div className="flex h-full items-center justify-center text-xs text-slate-600">Phase-folded signal unavailable.</div>;
-  const mf=median(data.map(x=>Number(x.flux)).filter(Number.isFinite));
-  const rel=data.map(x=>({phase:Number(x.phase),relativeFlux:(Number(x.flux)/mf-1)*100})).filter(x=>Number.isFinite(x.phase)&&Number.isFinite(x.relativeFlux));
-  const vals=rel.map(x=>x.relativeFlux),lo=Math.min(...vals),hi=Math.max(...vals),pad=Math.max((hi-lo)*.15,.01);
+  const rel=data.map(x=>({phase:Number(x.phase),relativeFlux:Number(x.flux)})).filter(x=>Number.isFinite(x.phase)&&Number.isFinite(x.relativeFlux));
+  const vals=rel.map(x=>x.relativeFlux),lo=Math.min(...vals),hi=Math.max(...vals),pad=Math.max((hi-lo)*.15,.001);
   const tw=periodDays&&transitDurationDays?transitDurationDays/periodDays:.06;
   return <ResponsiveContainer width="100%" height="100%">
     <ScatterChart margin={{top:10,right:10,left:2,bottom:20}}>
