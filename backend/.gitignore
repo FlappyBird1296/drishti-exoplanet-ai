@@ -27,3 +27,6 @@ temp/
 
 ml_data/
 *.csv
+
+batch_results/
+auto.py
