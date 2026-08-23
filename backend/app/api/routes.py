@@ -98,7 +98,23 @@ async def analyze(
 
             prediction=result[
                 "ml_prediction"
-            ]
+            ],
+
+            # ======================================
+            # STORE GRAPHICAL ANALYSIS
+            # ======================================
+
+            light_curve=result[
+                "light_curve"
+            ],
+
+            detected_transits=result[
+                "detected_transits"
+            ],
+
+            phase_folded_curve=result[
+                "phase_folded_curve"
+            ],
         )
 
         return {

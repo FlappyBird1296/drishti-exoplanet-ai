@@ -11,23 +11,46 @@ def save_analysis(
     processed,
     features,
     candidate_score,
-    prediction
+    prediction,
+    light_curve=None,
+    detected_transits=None,
+    phase_folded_curve=None,
 ):
 
-    feature_data=json.dumps(
-        {
-            key: value
-            for key, value in features.items()
-            if isinstance(
-                value,
-                (
-                    int,
-                    float,
-                    str,
-                    type(None)
-                )
-            )
-        }
+    # ==========================================
+    # STORE ANALYSIS + VISUALIZATION DATA
+    # ==========================================
+
+    stored_feature_data = {
+        key: value
+        for key, value in features.items()
+        if isinstance(
+            value,
+            (
+                int,
+                float,
+                str,
+                type(None),
+            ),
+        )
+    }
+
+    # Visualization data is stored in the existing
+    # feature_data JSON column.
+    stored_feature_data["light_curve"] = (
+        light_curve or []
+    )
+
+    stored_feature_data["detected_transits"] = (
+        detected_transits or []
+    )
+
+    stored_feature_data["phase_folded_curve"] = (
+        phase_folded_curve or []
+    )
+
+    feature_data = json.dumps(
+        stored_feature_data
     )
 
     analysis = Analysis(
@@ -122,12 +145,17 @@ def save_analysis(
             )
         ),
 
+        # Existing transit storage remains unchanged.
         transit_data=json.dumps(
             features.get(
                 "transit_times",
                 []
             )
-        )
+        ),
+
+        # NEW:
+        # Store complete visualization payload.
+        feature_data=feature_data,
     )
 
     db.add(
@@ -141,4 +169,3 @@ def save_analysis(
     )
 
     return analysis
-
