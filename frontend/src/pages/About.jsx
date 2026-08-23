@@ -7,7 +7,7 @@ const steps=[
  [Brain,"AI Classification","Random Forest model","predicts planetary nature"],
  [Star,"Candidate Ranking","Scoring and prioritization","for follow-up studies"],
 ];
-const team=[["R","Rithik","ML Engineer & Developer"],["J","Jehith","Backend Developer"],["M","Maniprakash","Frontend Developer & UI/UX Designer"],["H","Harshith","Data Analyst & Tester"]];
+const team=[["M","Manoranjan","CSE AIML (2025-29)"],["J","Jagannath","CSE AIML (2025-29)"],["T","Tanushree","CSE AIML (2025-29)"],["A","Amitanshu","CSE AIML (2025-29)"],["S","Soumya","CSE AIML (2025-29)"],];
 
 export default function About(){
  return <div className="mx-auto max-w-[1280px] px-5 py-6 xl:px-7">
@@ -65,7 +65,7 @@ export default function About(){
     </div>
    </aside>
   </div>
-  <footer className="mt-4 border-t border-white/[.06] py-4 text-center text-[11px] text-slate-600">✦ &nbsp; Made with curiosity, code, and coffee. &nbsp;&nbsp;|&nbsp;&nbsp; Drishti Exoplanet AI © 2024</footer>
+  <footer className="mt-4 border-t border-white/[.06] py-4 text-center text-[11px] text-slate-600">✦ &nbsp; Made with curiosity, code, and coffee. &nbsp;&nbsp;|&nbsp;&nbsp; Drishti Exoplanet AI © 2026</footer>
  </div>
 }
 function Mission({icon:Icon,title,color,children}){const c={violet:"text-violet-400",blue:"text-sky-400",green:"text-emerald-400",amber:"text-amber-400"}[color];return <div className="border-r border-white/[.07] p-5 last:border-0"><div className={`flex h-11 w-11 items-center justify-center rounded-full bg-white/[.025] ${c}`}><Icon size={22}/></div><p className={`mt-4 text-[14px] font-medium ${c}`}>{title}</p><p className="mt-2 text-[11px] leading-5 text-slate-400">{children}</p></div>}
