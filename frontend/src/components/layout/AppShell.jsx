@@ -1,332 +1,63 @@
-import {
-    BarChart3,
-    Telescope,
-    ScanSearch,
-    Orbit,
-    Info,
-} from "lucide-react";
+import { BarChart3, Telescope, ScanSearch, Orbit, Info, Sparkles } from "lucide-react";
+import SpaceScene from "../three/SpaceScene";
 
-
-const navigation = [
-    {
-        id: "dashboard",
-        label: "Dashboard",
-        icon: BarChart3,
-    },
-    {
-        id: "analyze",
-        label: "Analyze",
-        icon: ScanSearch,
-    },
-    {
-        id: "candidates",
-        label: "Candidates",
-        icon: Orbit,
-    },
-    {
-        id: "about",
-        label: "About",
-        icon: Info,
-    },
+const nav=[
+  {id:"dashboard",label:"Dashboard",icon:BarChart3},
+  {id:"analyze",label:"Analyze",icon:ScanSearch},
+  {id:"candidates",label:"Candidates",icon:Orbit},
+  {id:"about",label:"About",icon:Info},
 ];
 
+export default function AppShell({page,setPage,children}){
+  return <div className="min-h-screen bg-[#020712] text-slate-100">
+    <aside className="fixed inset-y-0 left-0 z-50 hidden w-[244px] overflow-hidden border-r border-[#20283b] bg-[#030816] lg:block">
+      <div className="absolute inset-x-0 bottom-0 h-[56%] opacity-75">
+        <SpaceScene/>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-[#030816] via-[#030816]/25 to-transparent"/>
+      <div className="relative z-10 flex h-full flex-col px-[14px] py-6">
+        <button onClick={()=>setPage("dashboard")} className="flex items-center gap-3 px-2 text-left">
+          <div className="flex h-[56px] w-[56px] items-center justify-center rounded-full border border-violet-400/50 bg-violet-500/[.05] text-violet-300 shadow-[0_0_22px_rgba(124,92,255,.12)]">
+            <Telescope size={27} strokeWidth={1.55}/>
+          </div>
+          <div>
+            <div className="text-[20px] font-medium tracking-[.12em] text-white">DRISHTI</div>
+            <div className="text-[13px] text-slate-400">Exoplanet AI</div>
+          </div>
+        </button>
 
-export default function AppShell({
-    page,
-    setPage,
-    children,
-}) {
+        <nav className="mt-8 space-y-1">
+          {nav.map(({id,label,icon:Icon})=>{
+            const active=page===id;
+            return <button key={id} onClick={()=>setPage(id)}
+              className={`flex h-[48px] w-full items-center gap-4 rounded-lg px-3 text-[15px] transition ${
+                active
+                ? "bg-violet-500/[.13] text-violet-300 shadow-[inset_0_0_20px_rgba(124,92,255,.04)]"
+                : "text-slate-300 hover:bg-white/[.035] hover:text-white"
+              }`}>
+              <Icon size={20} strokeWidth={active?2:1.7}/>
+              <span>{label}</span>
+            </button>
+          })}
+        </nav>
 
-    return (
-        <div className="
-            min-h-screen
-            bg-[#f7f8fc]
-            text-slate-900
-        ">
-
-            {/* =========================
-                TOP BAR
-            ========================== */}
-
-            <header className="
-                fixed
-                left-0
-                right-0
-                top-0
-                z-50
-                h-[72px]
-                border-b
-                border-slate-200/80
-                bg-white/85
-                backdrop-blur-xl
-            ">
-
-                <div className="
-                    flex
-                    h-full
-                    items-center
-                    justify-between
-                    px-5
-                    md:px-8
-                ">
-
-                    {/* Brand */}
-
-                    <button
-                        onClick={() => setPage("dashboard")}
-                        className="
-                            flex
-                            items-center
-                            gap-3
-                        "
-                    >
-
-                        <div className="
-                            flex
-                            h-10
-                            w-10
-                            items-center
-                            justify-center
-                            rounded-xl
-                            bg-gradient-to-br
-                            from-violet-600
-                            to-indigo-600
-                            text-white
-                            shadow-lg
-                            shadow-violet-500/20
-                        ">
-
-                            <Telescope
-                                size={20}
-                            />
-
-                        </div>
-
-                        <div className="
-                            hidden
-                            sm:block
-                            text-left
-                        ">
-
-                            <div className="
-                                text-sm
-                                font-bold
-                                tracking-[0.2em]
-                            ">
-                                DRISHTI
-                            </div>
-
-                            <div className="
-                                text-[9px]
-                                uppercase
-                                tracking-[0.2em]
-                                text-slate-400
-                            ">
-                                Exoplanet Intelligence
-                            </div>
-
-                        </div>
-
-                    </button>
-
-
-                    {/* Status */}
-
-                    <div className="
-                        flex
-                        items-center
-                        gap-2
-                        rounded-full
-                        border
-                        border-emerald-200
-                        bg-emerald-50
-                        px-3
-                        py-1.5
-                        text-xs
-                        font-medium
-                        text-emerald-700
-                    ">
-
-                        <span className="
-                            h-1.5
-                            w-1.5
-                            rounded-full
-                            bg-emerald-500
-                        "/>
-
-                        System Ready
-
-                    </div>
-
-                </div>
-
-            </header>
-
-
-            {/* =========================
-                SIDEBAR
-            ========================== */}
-
-            <aside className="
-                fixed
-                bottom-0
-                left-0
-                top-[72px]
-                z-40
-                hidden
-                w-60
-                border-r
-                border-slate-200/80
-                bg-white
-                lg:block
-            ">
-
-                <div className="
-                    flex
-                    h-full
-                    flex-col
-                    px-4
-                    py-6
-                ">
-
-                    <p className="
-                        mb-3
-                        px-3
-                        text-[10px]
-                        font-semibold
-                        uppercase
-                        tracking-[0.2em]
-                        text-slate-400
-                    ">
-                        Observatory
-                    </p>
-
-
-                    <nav className="
-                        space-y-1
-                    ">
-
-                        {navigation.map((item) => {
-
-                            const Icon = item.icon;
-
-                            const active =
-                                page === item.id;
-
-                            return (
-
-                                <button
-                                    key={item.id}
-                                    onClick={() =>
-                                        setPage(item.id)
-                                    }
-                                    className={`
-                                        flex
-                                        w-full
-                                        items-center
-                                        gap-3
-                                        rounded-xl
-                                        px-3
-                                        py-3
-                                        text-sm
-                                        font-medium
-                                        transition
-                                        ${
-                                            active
-                                                ? `
-                                                    bg-violet-50
-                                                    text-violet-700
-                                                `
-                                                : `
-                                                    text-slate-500
-                                                    hover:bg-slate-50
-                                                    hover:text-slate-900
-                                                `
-                                        }
-                                    `}
-                                >
-
-                                    <Icon
-                                        size={18}
-                                        strokeWidth={
-                                            active ? 2 : 1.7
-                                        }
-                                    />
-
-                                    {item.label}
-
-                                    {active && (
-                                        <span className="
-                                            ml-auto
-                                            h-1.5
-                                            w-1.5
-                                            rounded-full
-                                            bg-violet-500
-                                        " />
-                                    )}
-
-                                </button>
-
-                            );
-
-                        })}
-
-                    </nav>
-
-
-                    {/* Bottom information */}
-
-                    <div className="
-                        mt-auto
-                        rounded-2xl
-                        border
-                        border-violet-100
-                        bg-gradient-to-br
-                        from-violet-50
-                        to-indigo-50
-                        p-4
-                    ">
-
-                        <p className="
-                            text-xs
-                            font-semibold
-                            text-slate-700
-                        ">
-                            Discovery Engine
-                        </p>
-
-                        <p className="
-                            mt-1
-                            text-[11px]
-                            leading-5
-                            text-slate-500
-                        ">
-                            Signal processing and
-                            machine learning pipeline
-                            ready for analysis.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-
-            {/* =========================
-                MAIN CONTENT
-            ========================== */}
-
-            <main className="
-                min-h-screen
-                pt-[72px]
-                lg:pl-60
-            ">
-
-                {children}
-
-            </main>
-
+        <div className="mt-4 h-px bg-white/[.07]"/>
+        <div className="mt-6 px-2">
+          <p className="text-[12px] uppercase tracking-[.05em] text-slate-500">AI MODEL</p>
+          <p className="mt-3 text-[14px] text-slate-200">Random Forest</p>
+          <div className="mt-4 h-[7px] overflow-hidden rounded-full bg-slate-800">
+            <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-violet-600 to-violet-400"/>
+          </div>
+          <div className="mt-2 flex justify-between text-[11px] text-slate-500"><span>Model Confidence</span><span>82%</span></div>
         </div>
-    );
+
+        <div className="mt-auto rounded-xl border border-violet-400/15 bg-[#080f20]/90 p-4 backdrop-blur-sm">
+          <p className="text-[14px] font-medium text-slate-200">Built for the Stars</p>
+          <p className="mt-2 flex gap-2 text-[11px] leading-5 text-slate-400"><Sparkles size={14} className="mt-0.5 shrink-0 text-violet-400"/>AI-powered exoplanet detection from light curves.</p>
+        </div>
+      </div>
+    </aside>
+
+    <main className="min-h-screen lg:pl-[244px]">{children}</main>
+  </div>
 }
