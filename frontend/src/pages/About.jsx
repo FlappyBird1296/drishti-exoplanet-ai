@@ -41,7 +41,7 @@ export default function About(){
         ["🟠","Scikit-learn","Machine learning made simple"],
         ["◉","Astropy","Astronomical computations"],
         ["◌","Lightkurve","Work with Kepler & TESS data"],
-        ["◉","SQLite","Reliable storage for analyses"],
+        ["◉","PostgreSQL","Reliable storage for analyses"],
        ].map(([i,t,d])=><div key={t} className="rounded-xl border border-white/[.07] bg-[#050c19] p-4"><div className="flex items-center gap-2"><span className="text-[19px]">{i}</span><span className="text-[13px] text-slate-300">{t}</span></div><p className="mt-4 text-[11px] leading-5 text-slate-500">{d}</p></div>)}
       </div>
     </section>
